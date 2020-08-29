@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author cristian
  */
 @RestController
-@RequestMapping("/api/participants")
+@RequestMapping("/api/persons")
 public class PersonAPIS {
     
     @Autowired private PersonService service;
