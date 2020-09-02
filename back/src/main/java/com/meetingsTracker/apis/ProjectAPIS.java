@@ -31,7 +31,7 @@ public class ProjectAPIS {
             List<Project> projects = service.getProjects();
             return new ResponseEntity<>(projects, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>("oops...something went wrong trying to process your request", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("\"oops...something went wrong trying to process your request\"", HttpStatus.INTERNAL_SERVER_ERROR);
             
         }
     }

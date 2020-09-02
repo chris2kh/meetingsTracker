@@ -37,7 +37,7 @@ public class PersonAPIS {
     
     private ResponseEntity somethingWentWrong (Exception ex) {
         System.out.println(ex.toString());
-        return new ResponseEntity<>("oops...something went wrong trying to process your request", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>("\"oops...something went wrong trying to process your request\"", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
 

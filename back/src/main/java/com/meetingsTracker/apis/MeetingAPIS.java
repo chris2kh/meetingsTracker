@@ -5,13 +5,17 @@
  */
 package com.meetingsTracker.apis;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.meetingsTracker.model.Meeting;
 import com.meetingsTracker.model.MeetingHeader;
 import com.meetingsTracker.services.MeetingService;
+import java.sql.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/meetings")
 public class MeetingAPIS {
     
@@ -35,7 +40,9 @@ public class MeetingAPIS {
     public ResponseEntity getHeaders(@RequestParam("from") String from, @RequestParam("until") String until) {
         try {
             List<MeetingHeader> headers = service.getHeaders(from, until);
-            return new ResponseEntity<>(headers, HttpStatus.OK);
+            ObjectMapper mapper = new ObjectMapper();
+            String response = mapper.writeValueAsString(headers);
+            return new ResponseEntity(response, HttpStatus.OK);
         } catch (Exception ex) {
            return somethingWentWrong(ex);
         }
@@ -55,7 +62,7 @@ public class MeetingAPIS {
     public ResponseEntity save(@RequestBody Meeting meeting) {
         try {
             service.save(meeting);
-            return new ResponseEntity<>("guardado con exito", HttpStatus.OK);
+            return new ResponseEntity<>("\"meeting was saved\"", HttpStatus.OK);
         } catch (Exception ex) {
             return somethingWentWrong(ex);
         }
@@ -66,7 +73,7 @@ public class MeetingAPIS {
     public ResponseEntity deleteMeeting(@RequestParam("id") int id) {
         try {
             service.deleteMeeting(id);
-            return new ResponseEntity<>("borrado con exito", HttpStatus.OK);
+            return new ResponseEntity("\"meeting was deleted\"", HttpStatus.OK);
         } catch (Exception ex) {   
             return somethingWentWrong(ex);
         }
@@ -74,7 +81,7 @@ public class MeetingAPIS {
     
     private ResponseEntity somethingWentWrong (Exception ex) {
         System.out.println(ex.toString());
-        return new ResponseEntity<>("oops...something went wrong trying to process your request", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>("\"oops...something went wrong trying to process your request\"", HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
 }

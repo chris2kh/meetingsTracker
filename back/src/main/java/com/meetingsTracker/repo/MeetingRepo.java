@@ -77,7 +77,7 @@ public class MeetingRepo {
     public void deleteMeeting(int id) {
         String sql = " delete from meetings where id = ?;";
         jdbcTemplate.update(sql, new Object[] {id}); // we just need to delete the register on this table
-                                                     // because database deletes other tables entries on cascade   
+                                                     // because database deletes other tables associated entries on cascade   
     }
     
     

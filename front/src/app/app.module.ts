@@ -3,13 +3,11 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSliderModule } from '@angular/material/slider';
 import { HomeComponent } from './home/home.component';
 import { MeetingComponent } from './meeting/meeting.component';
 import { APIrequest } from './services/APIrequest';
-
-
+import { HttpClientModule } from '@angular/common/http';
+import { MaterialModule } from './material.module';
 
 @NgModule({
   declarations: [
@@ -20,8 +18,8 @@ import { APIrequest } from './services/APIrequest';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
-    MatSliderModule
+    HttpClientModule,
+    MaterialModule
   ],
   providers: [APIrequest],
   bootstrap: [AppComponent]
