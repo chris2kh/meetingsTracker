@@ -1,44 +1,68 @@
-<p>home works!</p>
-<button (click)="deleteByIdDialog(13)">new meeting</button>
-<button (click)="find(from.value,until.value)">show meetings</button>
+  <div class="mat-div">
+    <span id="title">Meetings</span>
 
-<mat-form-field appearance="fill">
-    <mat-label>From: </mat-label>
-  <!-- #docregion toggle -->
-    <input matInput [matDatepicker]="pickerFrom" #from>
-    <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-    <mat-datepicker #pickerFrom></mat-datepicker>
-  <!-- #enddocregion toggle -->
- </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>From: </mat-label>
+      <!-- #docregion toggle -->
+        <input matInput [matDatepicker]="pickerFrom" #from>
+        <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFrom></mat-datepicker>
+      <!-- #enddocregion toggle -->
+    </mat-form-field>
 
- <mat-form-field appearance="fill">
-    <mat-label>Until: </mat-label>
-  <!-- #docregion toggle -->
-    <input matInput [matDatepicker]="pickerUntil" #until>
-    <mat-datepicker-toggle matSuffix [for]="pickerUntil"></mat-datepicker-toggle>
-    <mat-datepicker #pickerUntil></mat-datepicker>
-  <!-- #enddocregion toggle -->
- </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Until: </mat-label>
+      <!-- #docregion toggle -->
+        <input matInput [matDatepicker]="pickerUntil" #until>
+        <mat-datepicker-toggle matSuffix [for]="pickerUntil"></mat-datepicker-toggle>
+        <mat-datepicker #pickerUntil></mat-datepicker>
+      <!-- #enddocregion toggle -->
+    </mat-form-field>
+    
+      <button mat-fab color="accent" aria-label="Example icon button with a delete icon"
+          (click)="find(from.value,until.value)"
+      > 
+        <mat-icon>search</mat-icon>
+      </button>
+      <button id="button-add" mat-fab color="primary" aria-label="Example icon button with a delete icon">
+        <mat-icon>add</mat-icon>
+      </button>
+  </div>
 
- <mat-table class="meetings-table mat-elevation-z8" [dataSource]="dataSource">
-  
+<mat-icon [ngStyle]="{'display': checkboxes.selected.length>0 ? 'inline':'none'}" class="delete-icon">delete_forever</mat-icon>
+<mat-table selectable-rows="true" class="meetings-table mat-elevation-z8" [dataSource]="dataSource">    
+    <ng-container matColumnDef="checkbox">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox
+          (change)="$event? toggleAll():null"
+          [checked]="checkboxes.hasValue() && allChecked()"
+          [indeterminate]="checkboxes.hasValue() && !allChecked()"
+        ></mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let meeting">
+        <mat-checkbox
+          (click)="$event.stopPropagation()"
+          (change)="$event? checkboxes.toggle(meeting): null"
+          [checked]="checkboxes.isSelected(meeting)"
+        ></mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="title">
-        <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
-        <mat-cell *matCellDef="let meeting">{{meeting.title}}</mat-cell>
+      <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
+      <mat-cell *matCellDef="let meeting">{{meeting.title}}</mat-cell>
     </ng-container>
   
     <ng-container matColumnDef="project">
-        <mat-header-cell *matHeaderCellDef>Project</mat-header-cell>
-        <mat-cell *matCellDef="let meeting">{{meeting.project}}</mat-cell>
+      <mat-header-cell *matHeaderCellDef>Project</mat-header-cell>
+      <mat-cell *matCellDef="let meeting">{{meeting.project}}</mat-cell>
     </ng-container>
   
     <ng-container matColumnDef="date">
-        <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-        <mat-cell *matCellDef="let meeting">{{meeting.date}}</mat-cell>
+      <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+      <mat-cell *matCellDef="let meeting">{{meeting.date}}</mat-cell>
     </ng-container>
     
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    
-    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-    
+    <mat-row *matRowDef="let meeting; columns: displayedColumns" (click)="load(meeting)"></mat-row>
 </mat-table>

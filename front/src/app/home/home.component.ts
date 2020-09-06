@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { APIrequest } from '../services/APIrequest';
 import { MeetingHeader } from '../model/MeetingHeader';
-import { Meeting } from '../model/Meeting';
 import { Router } from '@angular/router';
 import Swal  from 'sweetalert2';
+import { SelectionModel } from '@angular/cdk/collections';
+import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY } from '@angular/cdk/overlay/overlay-directives';
 
 @Component({
   selector: 'app-home',
@@ -11,20 +12,21 @@ import Swal  from 'sweetalert2';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  meetingHeaders: MeetingHeader[];
   displayedColumns: String[];
   dataSource: MeetingHeader[];
+  checkboxes: SelectionModel<MeetingHeader> = new SelectionModel<MeetingHeader>(true, []);
   constructor(private api: APIrequest, private router: Router) { }
   ngOnInit(): void {
-    this.displayedColumns = ["title","project","date"];
+    this.displayedColumns = ["checkbox","title","project","date"];
+    //this.checkboxes = new SelectionModel<MeetingHeader>(true, []);
   }
 
   newMeeting(): void {
     this.router.navigate(["meeting"]);
   }
 
-  loadMeeting(id: number): void {
-    this.router.navigate(["meeting"], {queryParams:{ load: 'true', id: id}});
+  load(meeting: MeetingHeader): void {
+    //this.router.navigate(["meeting"], {queryParams:{ id: meeting.id}});
   }
 
   find(from: String, until: String): void {
@@ -42,8 +44,8 @@ export class HomeComponent implements OnInit {
     error => Swal.fire(error.error));
   }
 
-  delete(meeting: Meeting): void {
-    this.api.deleteMeeting(meeting.projectId).subscribe( response => Swal.fire(response.toString()), 
+  delete(meeting: MeetingHeader): void {
+    this.api.deleteMeeting(meeting.id).subscribe( response => Swal.fire(response.toString()), 
     error => Swal.fire(error.error));
   }
 
@@ -82,6 +84,18 @@ export class HomeComponent implements OnInit {
       header.date = new Date(milliseconds).toISOString().split("T")[0];
     });
     return meetingHeaders;
-  } 
+  }
+  
+  allChecked(): boolean {
+    return this.dataSource.length === this.checkboxes.selected.length;
+  }
 
+  toggleAll(): void {
+    if (this.allChecked()) {
+      this.checkboxes.clear();
+    }
+    else {
+      this.dataSource.forEach(meeting => this.checkboxes.select(meeting));
+    }
+  }
 }
