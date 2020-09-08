@@ -19,21 +19,24 @@
       <!-- #enddocregion toggle -->
     </mat-form-field>
     
-      <button mat-fab color="accent" aria-label="Example icon button with a delete icon"
-          (click)="find(from.value,until.value)"
-      > 
+      <button mat-fab color="accent" (click)="find(from.value,until.value)"> 
         <mat-icon>search</mat-icon>
       </button>
-      <button id="button-add" mat-fab color="primary" aria-label="Example icon button with a delete icon">
+      <button id="button-add" mat-fab color="primary">
         <mat-icon>add</mat-icon>
       </button>
   </div>
 
-<mat-icon [ngStyle]="{'display': checkboxes.selected.length>0 ? 'inline':'none'}" class="delete-icon">delete_forever</mat-icon>
+<div class="items-selected" [style.visibility] = "checkboxes.selected.length > 0? 'visible':'hidden'">
+  <mat-icon (click)="deleteDialog()" class="delete-icon" color="warn">delete_forever</mat-icon>
+  <span class="span-selected">{{checkboxes.selected.length}} items selected</span>
+</div>
+
 <mat-table selectable-rows="true" class="meetings-table mat-elevation-z8" [dataSource]="dataSource">    
     <ng-container matColumnDef="checkbox">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox
+          color= "warn"
           (change)="$event? toggleAll():null"
           [checked]="checkboxes.hasValue() && allChecked()"
           [indeterminate]="checkboxes.hasValue() && !allChecked()"
@@ -41,6 +44,7 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let meeting">
         <mat-checkbox
+          color= "warn"
           (click)="$event.stopPropagation()"
           (change)="$event? checkboxes.toggle(meeting): null"
           [checked]="checkboxes.isSelected(meeting)"

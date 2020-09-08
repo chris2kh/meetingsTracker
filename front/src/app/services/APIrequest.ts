@@ -35,4 +35,7 @@ export class APIrequest {
         return this.client.delete<String>(this.API_MEETING + "/delete?id=" + id);
     }
 
+    deleteMeetings(ids: number[]): Observable<String> {
+        return this.client.post<String>(this.API_MEETING+ "/delete",ids,{headers: this.headers});
+    }
 }

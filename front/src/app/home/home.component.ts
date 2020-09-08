@@ -4,7 +4,6 @@ import { MeetingHeader } from '../model/MeetingHeader';
 import { Router } from '@angular/router';
 import Swal  from 'sweetalert2';
 import { SelectionModel } from '@angular/cdk/collections';
-import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY } from '@angular/cdk/overlay/overlay-directives';
 
 @Component({
   selector: 'app-home',
@@ -26,7 +25,7 @@ export class HomeComponent implements OnInit {
   }
 
   load(meeting: MeetingHeader): void {
-    //this.router.navigate(["meeting"], {queryParams:{ id: meeting.id}});
+    this.router.navigate(["meeting"], {queryParams:{ id: meeting.id}});
   }
 
   find(from: String, until: String): void {
@@ -49,24 +48,38 @@ export class HomeComponent implements OnInit {
     error => Swal.fire(error.error));
   }
 
-  deleteByIdDialog(id: number): void {
+  deleteDialog(): void {
+    let message: string;
+    let confirmText: string;
+    let selected: number = this.checkboxes.selected.length
+    if( selected == 1) {
+      message = 'this meeting?';
+      confirmText = 'Yes, delete it';
+    }
+    else {
+      message = 'these ' + selected + ' meetings?';
+      confirmText = 'Yes, delete them';
+    }
+
     Swal.fire({
-      title: 'Are you sure you want to delete this meeting?',
+      title: 'Are you sure you want to delete ' + message,
       text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: confirmText
     }).then(result => {
         if (result.value) {
-          this.deleteById(id);
+          let ids: number[] = this.checkboxes.selected.map(meeting => meeting.id);
+          this.deleteMeetings(ids);
         }
+        else this.checkboxes.clear();
     });
   }
 
-  deleteById(id: number): void {
-    this.api.deleteMeeting(id).subscribe( response => {
+  deleteMeetings(ids: number[]): void {
+    this.api.deleteMeetings(ids).subscribe( response => {
         Swal.fire(response.toString());
         // TODO delete meetingheader from list
     }, 
@@ -98,4 +111,5 @@ export class HomeComponent implements OnInit {
       this.dataSource.forEach(meeting => this.checkboxes.select(meeting));
     }
   }
+
 }
