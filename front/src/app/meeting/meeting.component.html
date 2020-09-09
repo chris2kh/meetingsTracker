@@ -1,1 +1,33 @@
-<p>meeting works!</p>
+<div class="example-container">
+    <mat-form-field appearance="fill">
+      <mat-label>Title</mat-label>
+      <input matInput>
+    </mat-form-field>
+    <br>
+    <mat-form-field appearance="fill">
+      <mat-label>Select a project for this meeting</mat-label>
+      <mat-select [(ngModel)]="selectedProject">
+        <mat-option *ngFor="let project of projects" [value]="project">{{project.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field appearance="fill">
+      <mat-label>Write your minute here</mat-label>
+      <textarea matInput></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Attendees</mat-label>
+        <mat-select [formControl]="people"  multiple>
+            <mat-option *ngFor="let person of persons" [value]="person">{{person.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+
+
+
+
+
+
+</div>
+  

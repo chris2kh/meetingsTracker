@@ -8,6 +8,7 @@ import { MeetingComponent } from './meeting/meeting.component';
 import { APIrequest } from './services/APIrequest';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './material.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { MaterialModule } from './material.module';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    MaterialModule
+    MaterialModule,
+    FormsModule
   ],
   providers: [APIrequest],
   bootstrap: [AppComponent]

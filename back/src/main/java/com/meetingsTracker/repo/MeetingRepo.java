@@ -80,7 +80,20 @@ public class MeetingRepo {
                                                      // because database deletes other tables associated entries on cascade   
     }
     
-    
+    public void deleteMeetings(int[] ids) {
+		String sql = " delete from meetings where id in (?);";
+		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setInt(1,ids[i]);
+            }
+            @Override
+            public int getBatchSize() {
+                return ids.length;
+            }
+        });
+	} 
+
     private List<Person> getMeetingParticipants(int id) {
         String sql = " select p.* from persons p join attendees a on p.id = a.fk_person_id " 
                    + " where a.fk_meeting_id = ?;";

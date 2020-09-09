@@ -36,4 +36,8 @@ public class MeetingService {
     public void deleteMeeting(int id) {
         repo.deleteMeeting(id);
     }
+
+	public void deleteMeetings(int[] ids) {
+		repo.deleteMeetings(ids);
+	}
 }

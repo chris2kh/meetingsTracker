@@ -13,11 +13,13 @@ import { SelectionModel } from '@angular/cdk/collections';
 export class HomeComponent implements OnInit {
   displayedColumns: String[];
   dataSource: MeetingHeader[];
-  checkboxes: SelectionModel<MeetingHeader> = new SelectionModel<MeetingHeader>(true, []);
+  checkboxes: SelectionModel<MeetingHeader>;
+  
   constructor(private api: APIrequest, private router: Router) { }
+  
   ngOnInit(): void {
     this.displayedColumns = ["checkbox","title","project","date"];
-    //this.checkboxes = new SelectionModel<MeetingHeader>(true, []);
+    this.checkboxes = new SelectionModel<MeetingHeader>(true, []);
   }
 
   newMeeting(): void {
@@ -71,19 +73,33 @@ export class HomeComponent implements OnInit {
       confirmButtonText: confirmText
     }).then(result => {
         if (result.value) {
-          let ids: number[] = this.checkboxes.selected.map(meeting => meeting.id);
-          this.deleteMeetings(ids);
+          this.deleteMeetings();
         }
-        else this.checkboxes.clear();
+        else {
+          this.checkboxes.clear();
+        }
     });
   }
 
-  deleteMeetings(ids: number[]): void {
+  deleteMeetings(): void {
+    let ids: number[] = this.checkboxes.selected.map(meeting => meeting.id);
     this.api.deleteMeetings(ids).subscribe( response => {
-        Swal.fire(response.toString());
-        // TODO delete meetingheader from list
+      Swal.fire({
+        position: 'top',
+        icon: 'success',
+        title: response.toString(),
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.checkboxes.clear();
+      this.deleteFromView(ids);
     }, 
     error => Swal.fire(error.error));
+  }
+
+  deleteFromView(ids: number[]): void {
+    this.dataSource = this.dataSource.filter( meeting => ids.indexOf(meeting.id) === -1);
+    this.checkboxes.clear();
   }
 
   parseDate(date: String): String {      

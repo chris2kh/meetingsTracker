@@ -81,13 +81,17 @@ public class MeetingAPIS {
 
 	@PostMapping("/delete")
 	public ResponseEntity deleteMeetings(@RequestBody int[] ids) {
-		return somethingWentWrong(null);
+	    try {
+            service.deleteMeetings(ids);
+            return new ResponseEntity("\"meetings were deleted\"", HttpStatus.OK);
+        } catch (Exception ex) {   
+            return somethingWentWrong(ex);
+        }
 	}
     
     private ResponseEntity somethingWentWrong (Exception ex) {
         System.out.println(ex.toString());
-        new ResponseEntity<>("\"oops...something went wrong trying to process your request\"", HttpStatus.INTERNAL_SERVER_ERROR);
-		new ResponseEntity
+        return new ResponseEntity<>("\"oops...something went wrong trying to process your request\"", HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
 }
