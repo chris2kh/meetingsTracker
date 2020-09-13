@@ -1,33 +1,105 @@
-<div class="example-container">
-    <mat-form-field appearance="fill">
-      <mat-label>Title</mat-label>
-      <input matInput>
-    </mat-form-field>
-    <br>
-    <mat-form-field appearance="fill">
-      <mat-label>Select a project for this meeting</mat-label>
-      <mat-select [(ngModel)]="selectedProject">
-        <mat-option *ngFor="let project of projects" [value]="project">{{project.name}}</mat-option>
+<div class="main-div">
+
+  <!--Title-->
+  <mat-form-field class="title" appearance="fill">
+    <mat-label>Title</mat-label>
+    <input matInput>
+  </mat-form-field>
+  <br>
+
+  <!--Project-->
+  <mat-form-field class ="project" appearance="fill">
+    <mat-label>Project</mat-label>
+    <mat-select [(ngModel)]="selectedProject">
+      <mat-option *ngFor="let project of projects" [value]="project">{{project.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+
+  <!--Attendees-->
+  <mat-form-field appearance="fill">
+      <mat-label>Attendees</mat-label>
+      <mat-select [(ngModel)]="attendees"  multiple>
+        <mat-select-trigger>
+          <mat-chip-list>
+            <mat-chip color="primary" selected *ngFor="let attendee of attendees" [removable]="true" (removed)=remove(attendee)>
+              {{attendee.name}}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+          </mat-chip-list>
+        </mat-select-trigger>
+        <mat-option *ngFor="let person of persons" [value]="person">{{person.name}}</mat-option>
       </mat-select>
-    </mat-form-field>
-    <br>
-    <mat-form-field appearance="fill">
-      <mat-label>Write your minute here</mat-label>
-      <textarea matInput></textarea>
-    </mat-form-field>
+  </mat-form-field>
+  <br>
 
-    <mat-form-field appearance="fill">
-        <mat-label>Attendees</mat-label>
-        <mat-select [formControl]="people"  multiple>
-            <mat-option *ngFor="let person of persons" [value]="person">{{person.name}}</mat-option>
-        </mat-select>
-    </mat-form-field>
+  <!--Minute-->
+  <mat-form-field appearance="fill">
+    <mat-label>Write your minute here</mat-label>
+    <textarea matInput></textarea>
+  </mat-form-field>
 
-
-
+  <!--new task-->
+  <br>
+  <button id="button-add" mat-fab color="primary" (click)="newTask()">
+    <mat-icon>add</mat-icon>
+  </button>
 
 
+  <!--Tasks table-->
+  <mat-table class="tasks-table mat-elevation-z8" [dataSource]="tasks">    
+    
+    <!--Responsible-->
+    <ng-container matColumnDef="responsible">
+      <mat-header-cell *matHeaderCellDef>Responsible</mat-header-cell>
+      <mat-cell *matCellDef="let task">
+        <mat-form-field>
+          <mat-select [(ngModel)]="task.id">
+            <mat-option *ngFor="let attendee of attendees" [value]="attendee.id">{{attendee.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-cell>
+    </ng-container>
+ 
+    <!--Task-->
+    <ng-container matColumnDef="task">
+      <mat-header-cell *matHeaderCellDef>Task</mat-header-cell>
+      <mat-cell *matCellDef="let task">
+        <mat-form-field>
+          <mat-label>Task</mat-label>
+          <input [(ngModel)]="task.description" matInput>
+        </mat-form-field>
+      </mat-cell>
+    </ng-container>
+ 
+    <!--DueDate-->
+    <ng-container matColumnDef="dueDate">
+      <mat-header-cell *matHeaderCellDef>Due date</mat-header-cell>
+      <mat-cell *matCellDef="let task">
+        <mat-form-field appearance="fill">
+          <mat-label>Due date:</mat-label>
+        <!-- #docregion toggle -->
+          <input matInput [matDatepicker]="pickerDueDate" #until>
+          <mat-datepicker-toggle matSuffix [for]="pickerDueDate"></mat-datepicker-toggle>
+          <mat-datepicker #pickerDueDate></mat-datepicker>
+        <!-- #enddocregion toggle -->
+      </mat-form-field>
+      </mat-cell>
+    </ng-container>
+   
+    <!--Action-->
+    <ng-container matColumnDef="action">
+      <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+      <mat-cell *matCellDef="let task">
+        <mat-icon>delete_forever</mat-icon>
+      </mat-cell>
+    </ng-container>
+ 
+    <mat-header-row *matHeaderRowDef="displayedTaskColumns"></mat-header-row>
+    <mat-row *matRowDef="let task; columns: displayedTaskColumns"></mat-row>
+  </mat-table>
 
+  <!--Buttons area-->
 
 </div>
   

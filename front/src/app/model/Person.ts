@@ -1,5 +1,6 @@
 
 export interface Person {
     id: number,
-    name: String
+    name: string,
+    hasTask: boolean
 }

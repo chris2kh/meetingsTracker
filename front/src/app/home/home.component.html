@@ -1,38 +1,43 @@
-  <div class="mat-div">
-    <span id="title">Meetings</span>
+<div class="mat-div">
+  <span id="title">Meetings</span>
+  
+  <!--from-->
+  <mat-form-field appearance="fill">
+      <mat-label>From: </mat-label>
+      <input matInput [matDatepicker]="pickerFrom" #from>
+      <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+      <mat-datepicker #pickerFrom></mat-datepicker>
+  </mat-form-field>
 
-    <mat-form-field appearance="fill">
-        <mat-label>From: </mat-label>
-      <!-- #docregion toggle -->
-        <input matInput [matDatepicker]="pickerFrom" #from>
-        <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-        <mat-datepicker #pickerFrom></mat-datepicker>
-      <!-- #enddocregion toggle -->
-    </mat-form-field>
+  <!--until-->
+  <mat-form-field appearance="fill">
+      <mat-label>Until: </mat-label>
+      <input matInput [matDatepicker]="pickerUntil" #until>
+      <mat-datepicker-toggle matSuffix [for]="pickerUntil"></mat-datepicker-toggle>
+      <mat-datepicker #pickerUntil></mat-datepicker>
+  </mat-form-field>
+  
+  <!--search-->
+  <button mat-fab color="accent" (click)="find(from.value,until.value)"> 
+    <mat-icon>search</mat-icon>
+  </button>
 
-    <mat-form-field appearance="fill">
-        <mat-label>Until: </mat-label>
-      <!-- #docregion toggle -->
-        <input matInput [matDatepicker]="pickerUntil" #until>
-        <mat-datepicker-toggle matSuffix [for]="pickerUntil"></mat-datepicker-toggle>
-        <mat-datepicker #pickerUntil></mat-datepicker>
-      <!-- #enddocregion toggle -->
-    </mat-form-field>
-    
-      <button mat-fab color="accent" (click)="find(from.value,until.value)"> 
-        <mat-icon>search</mat-icon>
-      </button>
-      <button id="button-add" mat-fab color="primary" (click)="newMeeting()">
-        <mat-icon>add</mat-icon>
-      </button>
-  </div>
+  <!--new meeting-->
+  <button id="button-add" mat-fab color="primary" (click)="newMeeting()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
 
+<!--trash icon area-->
 <div class="items-selected" [style.visibility] = "checkboxes.selected.length > 0? 'visible':'hidden'">
   <mat-icon (click)="deleteDialog()" class="delete-icon" color="warn">delete_forever</mat-icon>
   <span class="span-selected">{{checkboxes.selected.length}} items selected</span>
 </div>
 
-<mat-table selectable-rows="true" class="meetings-table mat-elevation-z8" [dataSource]="dataSource">    
+<!--meetings table-->
+<mat-table selectable-rows="true" class="tasks-table mat-elevation-z8" [dataSource]="dataSource">
+    
+    <!--checkbox-->    
     <ng-container matColumnDef="checkbox">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox
@@ -52,16 +57,19 @@
       </mat-cell>
     </ng-container>
 
+    <!--title-->
     <ng-container matColumnDef="title">
       <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
       <mat-cell *matCellDef="let meeting">{{meeting.title}}</mat-cell>
     </ng-container>
   
+    <!--project-->
     <ng-container matColumnDef="project">
       <mat-header-cell *matHeaderCellDef>Project</mat-header-cell>
       <mat-cell *matCellDef="let meeting">{{meeting.project}}</mat-cell>
     </ng-container>
   
+    <!--date-->
     <ng-container matColumnDef="date">
       <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
       <mat-cell *matCellDef="let meeting">{{meeting.date}}</mat-cell>

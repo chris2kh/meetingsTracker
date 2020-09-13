@@ -2,6 +2,7 @@
     text-align: center;
 }
 .mat-form-field {
+    font-size: large;
     margin: 0.7rem;
 }
 
@@ -29,9 +30,6 @@ table {
     width: 100%;
 }
 
-.mat-form-field {
-    font-size: large;
-}
 
 #title {
     font-size: xx-large;

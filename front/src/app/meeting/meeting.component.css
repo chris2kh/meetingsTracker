@@ -1,0 +1,21 @@
+.main-div {
+    text-align: center;
+    margin: auto;
+}
+
+.mat-form-field.title, .mat-form-field.project {
+    text-align: center;
+    font-size: x-large;
+    font-weight: 100;
+}
+
+.mat-form-field {
+    width: 90%;
+    margin-top: 1rem;
+}
+
+.tasks-table {
+    margin: auto;
+    margin-top: 1rem;
+    width: 90% ;
+}
