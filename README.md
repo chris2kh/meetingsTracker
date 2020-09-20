@@ -19,5 +19,5 @@ You also need to configure the application properties file with your own credent
 ### Homepage
 ![](screenshots/home.JPG)
 ### New meeting page
-![](screenshots/newMeeting.JPG)
+![](screenshots/newMeeting1.JPG)
 ![](screenshots/newMeeting2.JPG)
