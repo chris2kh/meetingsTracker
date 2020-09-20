@@ -29,8 +29,8 @@ export class APIrequest {
         return this.client.get<Person[]>(this.API_PERSONS);
     }
 
-    save(meeting: Meeting): void {
-
+    save(meeting: Meeting): Observable<string> {
+        return this.client.post<string>(this.API_MEETING+ "/save",meeting, {headers: this.headers});
     }
 
     deleteMeeting(id: number): Observable<String> {
@@ -40,5 +40,9 @@ export class APIrequest {
     deleteMeetings(ids: number[]): Observable<String> {
         if (ids.length == 1) return this.deleteMeeting(ids[0]);
         return this.client.post<String>(this.API_MEETING+ "/delete",ids,{headers: this.headers});
+    }
+
+    getMeeting(id: number): Observable<Meeting> {
+        return this.client.get<Meeting>(this.API_MEETING + "/get?id="+id);
     }
 }

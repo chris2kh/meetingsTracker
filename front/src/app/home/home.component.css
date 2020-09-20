@@ -1,6 +1,7 @@
 .mat-div {
     text-align: center;
 }
+
 .mat-form-field {
     font-size: large;
     margin: 0.7rem;
@@ -25,11 +26,9 @@
     font-weight: 100;
 }
 
-
 table {
     width: 100%;
 }
-
 
 #title {
     font-size: xx-large;

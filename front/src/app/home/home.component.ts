@@ -30,17 +30,17 @@ export class HomeComponent implements OnInit {
     this.router.navigate(["meeting"], {queryParams:{ id: meeting.id}});
   }
 
-  find(from: String, until: String): void {
+  find(from: String, to: String): void {
     if(from === "") {
       from = "01/01/1900";
     }
-    if(until === "") {
-      until = "01/01/3000";
+    if(to === "") {
+      to = "01/01/3000";
     }
     from = this.parseDate(from);
-    until = this.parseDate(until);
-    this.api.getMeetings(from, until).subscribe( headers => {
-    this.dataSource = this.convertMillisecondsToDate(headers);
+    to = this.parseDate(to);
+    this.api.getMeetings(from, to).subscribe( headers => {
+      this.dataSource = this.convertMillisecondsToDate(headers);
     },
     error => Swal.fire(error.error));
   }
@@ -90,7 +90,7 @@ export class HomeComponent implements OnInit {
         title: response.toString(),
         showConfirmButton: false,
         timer: 1500
-      })
+      });
       this.checkboxes.clear();
       this.deleteFromView(ids);
     }, 
@@ -127,5 +127,4 @@ export class HomeComponent implements OnInit {
       this.dataSource.forEach(meeting => this.checkboxes.select(meeting));
     }
   }
-
 }

@@ -1,28 +1,28 @@
-<div class="main-div">
+<div class="main-div" [ngClass]="{disable: !editMode}">
 
   <!--Title-->
   <mat-form-field class="title" appearance="fill">
     <mat-label>Title</mat-label>
-    <input matInput>
+    <input [(ngModel)]="meeting.title" matInput>
   </mat-form-field>
   <br>
 
   <!--Project-->
   <mat-form-field class ="project" appearance="fill">
     <mat-label>Project</mat-label>
-    <mat-select [(ngModel)]="selectedProject">
-      <mat-option *ngFor="let project of projects" [value]="project">{{project.name}}</mat-option>
+    <mat-select id="project" [(ngModel)]="meeting.projectId">
+      <mat-option class="project-option" *ngFor="let project of projects" [value]="project.id">{{project.name}}</mat-option>
     </mat-select>
   </mat-form-field>
   <br>
 
-  <!--Attendees-->
-  <mat-form-field appearance="fill">
+  <!--Attendees when in edit mode-->
+  <mat-form-field *ngIf="editMode" appearance="fill">
       <mat-label>Attendees</mat-label>
-      <mat-select [(ngModel)]="attendees"  multiple>
+      <mat-select  [(ngModel)]="meeting.attendees" multiple>
         <mat-select-trigger>
           <mat-chip-list>
-            <mat-chip color="primary" selected *ngFor="let attendee of attendees" [removable]="true" (removed)=remove(attendee)>
+            <mat-chip color="primary" selected *ngFor="let attendee of meeting.attendees" [removable]="true" (removed)=remove(attendee)>
               {{attendee.name}}
               <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip>
@@ -33,35 +33,48 @@
   </mat-form-field>
   <br>
 
+  <!--Attendees only when in view mode and not creating a new meeting
+    I had to use this trick because the mat-select-trigger was not loading the attendees from the server
+    and could not figure out how to make it work -->
+  <mat-form-field *ngIf="!editMode" appearance="fill">
+    <mat-label>Attendees</mat-label>
+    <mat-chip-list>
+      <mat-chip color="primary" *ngFor="let attendee of meeting.attendees">
+        {{attendee.name}}
+      </mat-chip>
+    </mat-chip-list>
+  </mat-form-field>
+
   <!--Minute-->
   <mat-form-field appearance="fill">
     <mat-label>Write your minute here</mat-label>
-    <textarea matInput></textarea>
+    <textarea cdkTextareaAutosize class="minute" [(ngModel)]="meeting.minute" matInput></textarea>
   </mat-form-field>
 
-  <!--new task-->
-  <br>
-  <button id="button-add" mat-fab color="primary" (click)="newTask()">
-    <mat-icon>add</mat-icon>
-  </button>
+  <!--new task button-->
+  <div id ="button-add-div" *ngIf="editMode">
+    <button id="button-add" mat-mini-fab color="primary" (click)="newTask()">
+      <mat-icon matTooltip ="new task">add</mat-icon>
+    </button>
+  </div>
 
 
   <!--Tasks table-->
-  <mat-table class="tasks-table mat-elevation-z8" [dataSource]="tasks">    
+  <mat-table class="tasks-table mat-elevation-z8" [dataSource]="meeting.tasks">    
     
-    <!--Responsible-->
+    <!--Responsible column-->
     <ng-container matColumnDef="responsible">
       <mat-header-cell *matHeaderCellDef>Responsible</mat-header-cell>
       <mat-cell *matCellDef="let task">
         <mat-form-field>
-          <mat-select [(ngModel)]="task.id">
-            <mat-option *ngFor="let attendee of attendees" [value]="attendee.id">{{attendee.name}}</mat-option>
+          <mat-select [(ngModel)]="task.personId">
+            <mat-option *ngFor="let attendee of meeting.attendees" [value]="attendee.id">{{attendee.name}}</mat-option>
           </mat-select>
         </mat-form-field>
       </mat-cell>
     </ng-container>
  
-    <!--Task-->
+    <!--Task column-->
     <ng-container matColumnDef="task">
       <mat-header-cell *matHeaderCellDef>Task</mat-header-cell>
       <mat-cell *matCellDef="let task">
@@ -72,26 +85,24 @@
       </mat-cell>
     </ng-container>
  
-    <!--DueDate-->
+    <!--DueDate column-->
     <ng-container matColumnDef="dueDate">
       <mat-header-cell *matHeaderCellDef>Due date</mat-header-cell>
       <mat-cell *matCellDef="let task">
         <mat-form-field appearance="fill">
           <mat-label>Due date:</mat-label>
-        <!-- #docregion toggle -->
-          <input matInput [matDatepicker]="pickerDueDate" #until>
+          <input [(ngModel)]="task.dueDate" matInput [matDatepicker]="pickerDueDate">
           <mat-datepicker-toggle matSuffix [for]="pickerDueDate"></mat-datepicker-toggle>
           <mat-datepicker #pickerDueDate></mat-datepicker>
-        <!-- #enddocregion toggle -->
       </mat-form-field>
       </mat-cell>
     </ng-container>
    
-    <!--Action-->
+    <!--Action column-->
     <ng-container matColumnDef="action">
       <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
       <mat-cell *matCellDef="let task">
-        <mat-icon>delete_forever</mat-icon>
+        <button mat-icon-button (click)="delete(task)"><mat-icon matTooltip ="delete this task" id="delete-task" color="warn" >delete_forever</mat-icon></button>
       </mat-cell>
     </ng-container>
  
@@ -99,7 +110,19 @@
     <mat-row *matRowDef="let task; columns: displayedTaskColumns"></mat-row>
   </mat-table>
 
-  <!--Buttons area-->
-
+  <!---save and cancel buttons-->
+  <br>
+  <div *ngIf="editMode">
+    <button id="save-button" mat-raised-button color="primary" (click)="saveDialog()">Save</button>
+    <button id="cancel-button" mat-raised-button color="warn" (click)="cancelDialog()">exit without saving</button>
+  </div>
 </div>
-  
+
+<!-- go back to homepage button when in view mode-->
+<br>
+<div *ngIf="!editMode" class="goback-div">
+  <button mat-fab color="accent" (click)="goToHomepage()">
+    <mat-icon>home</mat-icon>
+  </button>
+</div>
+<br>

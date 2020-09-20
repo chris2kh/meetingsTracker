@@ -64,7 +64,7 @@ public class MeetingRepo {
     @Transactional
     public void save (Meeting meeting) {
         String sql = " insert into meetings(title, fk_project_id, my_date, my_minute) values(?,?,current_date,?);";
-        jdbcTemplate.update(sql,"'"+meeting.getTitle()+"'",meeting.getProjectId(),"'"+meeting.getMinute()+"'");
+        jdbcTemplate.update(sql,meeting.getTitle(),meeting.getProjectId(),meeting.getMinute());
         sql = "select id from meetings order by id desc limit 1;";
         int id = jdbcTemplate.queryForObject(sql, Integer.class);
         meeting.setId(id);
@@ -145,7 +145,7 @@ public class MeetingRepo {
                 ps.setInt(1,id);
                 ps.setInt(2,task.getPersonId());
                 ps.setDate(3,task.getDueDate());
-                ps.setString(4,"'" + task.getDescription()+"'");
+                ps.setString(4,task.getDescription());
             }
             @Override
             public int getBatchSize() {
@@ -154,28 +154,4 @@ public class MeetingRepo {
         });
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    /*
-    public Meeting getMeeting(int id) {
-       return null; 
-    } 
-    
-    public List<MeetingHeader> getHeaders(String from, String until) {
-        
-    }
-    
-    public void save(Meeting meeting) { 
-    }
-    
-    public void deleteMeeting(int id) {
-    }*/
 }

@@ -5,14 +5,16 @@
  */
 package com.meetingsTracker.apis;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.meetingsTracker.model.Meeting;
 import com.meetingsTracker.model.MeetingHeader;
 import com.meetingsTracker.services.MeetingService;
-import java.sql.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -43,9 +45,9 @@ public class MeetingAPIS {
             ObjectMapper mapper = new ObjectMapper();
             String response = mapper.writeValueAsString(headers);
             return new ResponseEntity(response, HttpStatus.OK);
-        } catch (Exception ex) {
-           return somethingWentWrong(ex);
-        }
+        } catch (DataAccessException | JsonProcessingException ex) {
+           	return somethingWentWrong(ex);
+		}
     }
     
     @GetMapping("/get")
@@ -53,8 +55,8 @@ public class MeetingAPIS {
         try {
             Meeting meeting = service.getMeeting(id);
             return new ResponseEntity<>(meeting, HttpStatus.OK);
-        } catch (Exception ex) {   
-            return somethingWentWrong(ex);
+        } catch (DataAccessException ex) {   
+           	return somethingWentWrong(ex);
         }
     }
     
@@ -63,18 +65,17 @@ public class MeetingAPIS {
         try {
             service.save(meeting);
             return new ResponseEntity<>("\"meeting was saved\"", HttpStatus.OK);
-        } catch (Exception ex) {
-            return somethingWentWrong(ex);
+        } catch (DataAccessException ex) {
+        	return somethingWentWrong(ex);
         }
     }
-    
     
     @DeleteMapping("/delete")
     public ResponseEntity deleteMeeting(@RequestParam("id") int id) {
         try {
             service.deleteMeeting(id);
             return new ResponseEntity("\"meeting was deleted\"", HttpStatus.OK);
-        } catch (Exception ex) {   
+        } catch (DataAccessException ex) {   
             return somethingWentWrong(ex);
         }
     }
@@ -84,14 +85,13 @@ public class MeetingAPIS {
 	    try {
             service.deleteMeetings(ids);
             return new ResponseEntity("\"meetings were deleted\"", HttpStatus.OK);
-        } catch (Exception ex) {   
+        } catch (DataAccessException ex) {   
             return somethingWentWrong(ex);
         }
 	}
     
     private ResponseEntity somethingWentWrong (Exception ex) {
-        System.out.println(ex.toString());
+		Logger.getLogger(MeetingAPIS.class.getName()).log(Level.SEVERE, null, ex);
         return new ResponseEntity<>("\"oops...something went wrong trying to process your request\"", HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
 }

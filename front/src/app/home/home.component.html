@@ -9,16 +9,16 @@
       <mat-datepicker #pickerFrom></mat-datepicker>
   </mat-form-field>
 
-  <!--until-->
+  <!--to-->
   <mat-form-field appearance="fill">
-      <mat-label>Until: </mat-label>
-      <input matInput [matDatepicker]="pickerUntil" #until>
-      <mat-datepicker-toggle matSuffix [for]="pickerUntil"></mat-datepicker-toggle>
-      <mat-datepicker #pickerUntil></mat-datepicker>
+      <mat-label>To: </mat-label>
+      <input matInput [matDatepicker]="pickerTo" #to>
+      <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+      <mat-datepicker #pickerTo></mat-datepicker>
   </mat-form-field>
   
   <!--search-->
-  <button mat-fab color="accent" (click)="find(from.value,until.value)"> 
+  <button mat-fab color="accent" (click)="find(from.value,to.value)"> 
     <mat-icon>search</mat-icon>
   </button>
 
@@ -37,7 +37,7 @@
 <!--meetings table-->
 <mat-table selectable-rows="true" class="tasks-table mat-elevation-z8" [dataSource]="dataSource">
     
-    <!--checkbox-->    
+    <!--checkbox column-->    
     <ng-container matColumnDef="checkbox">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox
@@ -57,19 +57,19 @@
       </mat-cell>
     </ng-container>
 
-    <!--title-->
+    <!--title column-->
     <ng-container matColumnDef="title">
       <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
       <mat-cell *matCellDef="let meeting">{{meeting.title}}</mat-cell>
     </ng-container>
   
-    <!--project-->
+    <!--project column-->
     <ng-container matColumnDef="project">
       <mat-header-cell *matHeaderCellDef>Project</mat-header-cell>
       <mat-cell *matCellDef="let meeting">{{meeting.project}}</mat-cell>
     </ng-container>
   
-    <!--date-->
+    <!--date column-->
     <ng-container matColumnDef="date">
       <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
       <mat-cell *matCellDef="let meeting">{{meeting.date}}</mat-cell>

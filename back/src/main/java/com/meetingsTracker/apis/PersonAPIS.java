@@ -8,7 +8,10 @@ package com.meetingsTracker.apis;
 import com.meetingsTracker.model.Person;
 import com.meetingsTracker.services.PersonService;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,13 +35,13 @@ public class PersonAPIS {
         try {
             List<Person> persons = service.getPersons();
             return new ResponseEntity(persons, HttpStatus.OK);
-        } catch (Exception ex) {   
+        } catch (DataAccessException ex) {   
             return somethingWentWrong(ex);
         }
     }
     
     private ResponseEntity somethingWentWrong (Exception ex) {
-        System.out.println(ex.toString());
+		Logger.getLogger(PersonAPIS.class.getName()).log(Level.SEVERE, null, ex);
         return new ResponseEntity<>("\"oops...something went wrong trying to process your request\"", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

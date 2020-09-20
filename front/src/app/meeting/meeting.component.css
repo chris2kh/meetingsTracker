@@ -3,10 +3,18 @@
     margin: auto;
 }
 
+.disable {
+    pointer-events: none; 
+}
+
 .mat-form-field.title, .mat-form-field.project {
     text-align: center;
     font-size: x-large;
     font-weight: 100;
+}
+
+.project-option {
+    font-size: medium !important;
 }
 
 .mat-form-field {
@@ -18,4 +26,36 @@
     margin: auto;
     margin-top: 1rem;
     width: 90% ;
+}
+
+#button-add-div {
+    text-align: left;
+    margin-left: 4.7rem;
+}
+
+.mat-column-responsible {
+    flex: 0 0 20%;
+}
+
+.mat-column-dueDate {
+    flex: 0 0 15%;
+}
+
+.mat-column-action{
+    flex: 0 0 3%;
+}
+
+#delete-task:hover {
+    cursor: pointer;
+}
+
+#save-button, #cancel-button, #goback-button {
+    margin: 1rem;
+    font-size: large;
+    width: 15% !important;
+    height: 4rem;
+}
+
+.goback-div {
+    text-align: center;
 }
