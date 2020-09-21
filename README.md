@@ -1,4 +1,4 @@
-# meetingsTracker
+# meetings webapp
 
 This is a small web app to create and track meetings in your team.
 
