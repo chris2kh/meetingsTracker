@@ -24,7 +24,6 @@ export class MeetingComponent implements OnInit {
   ngOnInit(): void {
     this.meeting = {title: '',projectId: 0,date: null, tasks:[], attendees: [], minute: ''};
     this.api.getProjects().subscribe(response => this.projects = response);
-    this.api.getPersons().subscribe(response => this.persons = response);
     this.activatedRoute.queryParams.subscribe(queryParams => {
       let id: number = queryParams["id"];
       if( id == null) {
@@ -39,6 +38,7 @@ export class MeetingComponent implements OnInit {
   newMeetingInit(): void {
     this.editMode = true;
     this.displayedTaskColumns = ['responsible','task','dueDate','action'];
+    this.api.getPersons().subscribe(response => this.persons = response);
   }
 
   loadMeetingInit(id: number): void {
